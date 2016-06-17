@@ -1,0 +1,5 @@
+C:\Users\steven.neugent\Documents\Visual Studio 2013\Projects\ExcelLibrary\ExcelLibrary\bin\Debug\ExcelLibrary.dll
+C:\Users\steven.neugent\Documents\Visual Studio 2013\Projects\ExcelLibrary\ExcelLibrary\bin\Debug\ExcelLibrary.pdb
+C:\Users\steven.neugent\Documents\Visual Studio 2013\Projects\ExcelLibrary\ExcelLibrary\obj\Debug\ExcelLibrary.csproj.ResolveComReference.cache
+C:\Users\steven.neugent\Documents\Visual Studio 2013\Projects\ExcelLibrary\ExcelLibrary\obj\Debug\ExcelLibrary.dll
+C:\Users\steven.neugent\Documents\Visual Studio 2013\Projects\ExcelLibrary\ExcelLibrary\obj\Debug\ExcelLibrary.pdb
