@@ -54,7 +54,8 @@ namespace ExcelLibrary
                         }
                        
                     }
-                    catch (Exception ex) { 
+                    catch (Exception ex) {
+                        Console.Error.Write(ex.StackTrace);
                     }
                     
                 }
@@ -88,6 +89,7 @@ namespace ExcelLibrary
                     }
                     catch (Exception ex)
                     {
+                        Console.Error.Write(ex.StackTrace);
                     }
                     
                 }
@@ -131,7 +133,9 @@ namespace ExcelLibrary
                         vl.Add(value_location);
                         
                     }
-                    catch (Exception ex) { }
+                    catch (Exception ex) {
+                        Console.Error.Write(ex.StackTrace);
+                    }
                 }
             }
             return vl;
@@ -170,7 +174,7 @@ namespace ExcelLibrary
                     columns++;
                 }catch(Exception ex)
                 {
-
+                    Console.Error.Write(ex.StackTrace);
                 }
             }
             return columns;
@@ -192,7 +196,9 @@ namespace ExcelLibrary
                     if(!String.IsNullOrWhiteSpace(s))
                         rows++;
                 }
-                catch (Exception ex) { }
+                catch (Exception ex) {
+                    Console.Error.Write(ex.StackTrace);
+                }
                
             }
             return rows;
@@ -228,11 +234,23 @@ namespace ExcelLibrary
                 String val_s = Convert.ToString(val);
                  return val_s;
             }
-             return "";
+             return String.Empty;
         }
        
-           
-        
+        /// <summary>
+        /// Extra clean up that can be done per work book along side
+        /// the ExcelReader application wide destruction.
+        /// </summary>
+        public void DestroyWorkBook()
+        {
+            ExcelReader.ReleaseCOMObject(this.workSheet);
+            ExcelReader.ReleaseCOMObject(this.xlsRange);
+
+            this.workSheet = null;
+            this.xlsRange = null;
+
+            GC.Collect();
+        }
            
         
         /// <summary>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Excel = Microsoft.Office.Interop.Excel;
 using Microsoft.Office.Interop.Excel;
-
+using System.Runtime.InteropServices;
 namespace ExcelLibrary
 {
     public class ExcelReader
@@ -26,6 +26,7 @@ namespace ExcelLibrary
         {
             this.FileLocation = AbsoluteFileLocation;
             Initiate();
+           
         }
 
         /// <summary>
@@ -33,6 +34,7 @@ namespace ExcelLibrary
         /// </summary>
         private void Initiate()
         {
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(OnProcessExit);
             Excel.Application ExcelApp = new Excel.Application();
             Excel.Workbook ExcelWB = null;
 
@@ -85,10 +87,43 @@ namespace ExcelLibrary
                 return this.ExcelWorkSheet;
             }
         }
-
-        public void close()
+        /// <summary>
+        /// Releases COM Objects.  Credit: http://www.claudiobernasconi.ch/2014/02/13/painless-office-interop-using-visual-c-sharp/
+        /// </summary>
+        /// <param name="obj">COM Object to release</param>
+        public static void ReleaseCOMObject(object obj)
         {
-            
+            if(obj != null && Marshal.IsComObject(obj))
+            {
+                Marshal.ReleaseComObject(obj);
+            }
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+        }
+
+        public void OnProcessExit(object sender, EventArgs e)
+        {
+            ReleaseCOMObject(this.ExcelWorkSheet);
+            ReleaseCOMObject(this.ExcelWorkbook);
+
+            this.ExcelWorkSheet = null;
+            this.ExcelWorkbook = null;
+
+            for (int i = 0; i < this.ExcelWorkSheets.Count; i++) {
+                ReleaseCOMObject(ExcelWorkSheets[i]);
+                ExcelWorkSheets[i] = null;
+            }
+
+            if(this.ExcelApplication != null)
+            {
+                this.ExcelApplication.Quit();
+            }
+
+            ReleaseCOMObject(ExcelApplication);
+
+            ExcelApplication = null;
         }
 
 
